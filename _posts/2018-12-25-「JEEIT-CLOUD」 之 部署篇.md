@@ -186,4 +186,148 @@ flush privileges; // 刷新设置立即生效
 ```
 然后就可以通过navicat(或者其他工具)远程连接了
 
+##### 第三步:部署redis
+
+Redis下载地址：https://redis.io/download（这个连接可能得翻墙查看，但是在centos7服务器上安装过程不需要翻墙，我查看了最新的是redis-4.0.9.tar.gz ）
+
+1.在centOS里通过wget下载redis
+```
+wget http://download.redis.io/releases/redis-4.0.9.tar.gz 
+```
+
+2.在/usr/local里面创建redis目录（这个是安装目录，自己随意放）
+```
+cd /usr/local
+mkdir redis
+```
+
+3.解压到创建的目录
+```
+cd ~
+tar -xzvf redis-4.0.9.tar.gz -C /usr/local/redis
+```
+
+已解压成功
+
+
+
+4.进入目录编译一下，用make命令编译一下
+```
+cd /usr/local/redis/redis-4.0.9
+make
+```
+注意：make命令执行完成编译后，会在src目录下生成6个可执行文件，
+
+分别是redis-server、redis-cli、redis-benchmark、redis-check-aof、redis-check-rdb、redis-sentinel。
+
+
+
+5.译生成的可执行文件拷贝到/usr/local/bin目录下（这个后期可以直接使用命令）；
+```
+cd /usr/local/redis/redis-4.0.9/src
+cp {redis-server,redis-cli,redis-benchmark,redis-check-aof,redis-check-rdb,redis-sentinel} /usr/local/bin
+```
+6.进入redis-4.0.9执行安装命令make install
+
+
+
+7.执行基本配置
+```
+./utils/install_server.sh
+```
+一阵回车就可以了，红圈就是默认配置的路径!!!
+
+
+
+8.查看开机启动列表
+```
+chkconfig --list
+
+```
+9.开启Redis服务操作通过/etc/init.d/redis_6379 start命令，也可通过（service redis_6379 start）；
+
+关闭Redis服务操作通过/etc/init.d/redis_6379 stop命令，也可通过（service redis_6379 stop）；
+
+
+10.远程登陆redis
+```
+cd /etc/redis
+```
+编辑 6379.conf
+```
+vim 6379.conf
+```
+a.在bind 127.0.0.1前加“#”将其注释掉
+
+
+
+b.默认为保护模式，把 protected-mode yes 改为 protected-mode no
+
+
+
+c.默认为不守护进程模式，把daemonize no 改为daemonize yes
+
+
+
+d.将 requirepass foobared前的“#”去掉，密码改为你想要设置的密码
+
+
+
+e.最后就可以在客户端登陆了
+
+ 
+
+
+
+！！！注意：这里的name是你自己起的名字，随便起，无所谓的，还有，到这里都没有成功的同学，看看是不是阿里云用户组端口6379没开，自己面壁思过去。
+
+
+
+11.这是虽然连接成功了，但是会有一个问题，就是在服务器你使用关闭命令时会出现
+```
+(error) NOAUTH Authentication required.错误
+```
+
+
+这是由于配置了密码以后，关闭的时候没有密码，所以会关闭不了。百度了一下，各种杀死进程什么的，感觉很麻烦，最后找到/etc/init.d/redis_6379文件，修改一下代码
+
+```
+$CLIEXEC -a "password" -p $REDISPORT shutdown
+
+```
+
+然后你就可以运行service redis_6379 stop关闭redis了。
+
+
+做完以后感觉头发又少了几根。
+
+
+##### 第四步:部署jeeit-cloud源码
+
+1.直接运行maven的package把jeeit-cloud源码打包
+
+2.用户linux - rz 上传到服务器
+
+3.运行：
+```
+nohup java -jar test-config.jar >log/test-config.log &
+
+```
+部署成功
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
