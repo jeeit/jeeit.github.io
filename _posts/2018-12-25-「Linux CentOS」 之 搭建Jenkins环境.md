@@ -1,13 +1,14 @@
 ---
 layout:     post
-title:      「Linux CentOS」 之 从零开始搭建JAVA环境
-subtitle:   「Linux CentOS」 之 从零开始搭建JAVA环境
+title:      「Linux CentOS」 之 搭建Jenkins环境
+subtitle:   「Linux CentOS」 之 搭建Jenkins环境
 date:       2018-12-25
 author:     JEEIT
 header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
     - Linux
+    - Jenkins
 ---
 
 > 正所谓前人栽树，后人乘凉。
@@ -16,7 +17,7 @@ tags:
 
 # 前言
 
-简单说一下如何在CentOS7上搭建Java开发环境
+简单说一下如何在CentOS7上搭建Jenkins环境
 
 # 快速开始
 
@@ -26,6 +27,14 @@ rz rs 是Linux上常用的上传下载命令，笔者从阿里去上买ECS云服
 ```
 yum install lrzsz
 ```
+具体版本快捷安装方式：
+
+centos: yum -y install curl
+
+ubuntu: sudo apt-get install curl
+
+其他发行版，建议通过资源地址，下载Linux版本解压tar -xzvf xxx.tar.gz，然后安装。
+
 ### 2.安装JDK
 ##### 2.1 检查是否已安装
 首先输入
@@ -99,3 +108,27 @@ java -version
  ```
 返回显示：java version "1.XXXXX"
 安装完成
+
+
+1.git安装
+
+(1)下载git命令:wget https://www.kernel.org/pub/software/scm/git/git-2.8.3.tar.gz          //选择一个目录后执行，我的是/usr/local/git
+
+(2)解压git的tar包命令: tar -xzvf git-2.8.3.tar.gz  ，进入解压后的文件夹:cd git-2.8.3
+
+(3)安装git安装编译所需要的依赖命令:yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker
+
+(4)安装编译源码所需依赖的时候，yum自动帮你安装了git，这时候你需要先卸载这个旧版的git，命令：yum remove git
+
+(5)编译git源码命令:make prefix=/usr/local/git all
+
+(6)安装git至/usr/local/git路径命令：make prefix=/usr/local/git install
+
+(5)配置git环境变量:vim /etc/profile  #编辑profile文件---->最下边添加git的路径即可：export PATH=$PATH:/usr/local/git/bin
+
+(6)让profile文件修改生效命令:source /etc/profile
+
+(7)检验git是否安装成功命令:git --version 
+
+https://blog.csdn.net/qq_36631900/article/details/86504508
+
