@@ -244,10 +244,10 @@ cp {redis-server,redis-cli,redis-benchmark,redis-check-aof,redis-check-rdb,redis
 chkconfig --list
 
 ```
-9.开启Redis服务操作通过/etc/init.d/redis_6379 start命令，也可通过（service redis_6379 start）；
+9.开启Redis服务操作通过/etc/init.d/redis_6379 start &命令，也可通过（service redis_6379 start）；
 
-关闭Redis服务操作通过/etc/init.d/redis_6379 stop命令，也可通过（service redis_6379 stop）；
-
+关闭Redis服务操作通过/etc/init.d/redis_6379 stop &命令，也可通过（service redis_6379 stop）；
+./redis-server &
 
 10.远程登陆redis
 ```
